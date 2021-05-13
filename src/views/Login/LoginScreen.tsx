@@ -10,6 +10,13 @@ export const LoginScreen = (props: Props) => {
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState(false);
 
+  const makeLogin = () => {
+    setIsLoading(!isLoading)
+    setTimeout(() => {
+      props.setToken('true')
+    }, 2000)
+  }
+
   return (
     <div className="container">
       <Paper className={classes.paper}>
@@ -20,7 +27,7 @@ export const LoginScreen = (props: Props) => {
           <div style={{ height: 10 }} />
           <TextField label="Senha" placeholder="Senha" variant="outlined" />
           <div style={{ height: 30 }} />
-          <Button className={classes.continueButton} variant="contained" onClick={() => setIsLoading(!isLoading)}>
+          <Button className={classes.continueButton} variant="contained" onClick={makeLogin}>
             {!isLoading && "Entrar"}
             {isLoading && (
               <CircularProgress size={30} />
@@ -47,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   continueButton: {
-    height: 40, 
+    height: 40,
     width: 100,
     padding: 5,
   }

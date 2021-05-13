@@ -1,11 +1,17 @@
 import { makeStyles, AppBar, Toolbar, Typography, Button, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import { useState } from 'react';
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { AboutScreen, HomeScreen } from './views';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { AboutScreen, HomeScreen, LoginScreen } from './views';
 
 export const App = () => {
   const classes = useStyles();
+  const [token, setToken] = useState('');
+
+  if (token === '') {
+    return <LoginScreen setToken={setToken}/>
+  }
 
   return (
     <Router>

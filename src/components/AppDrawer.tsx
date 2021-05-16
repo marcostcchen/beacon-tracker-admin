@@ -2,6 +2,10 @@ import { Drawer, List, ListItem, Divider, ListItemIcon, ListItemText, makeStyles
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { useHistory } from 'react-router';
+import { useEffect, useState } from 'react';
+import { userKey } from '../utils';
+import { User } from '../models';
+var ls = require('local-storage');
 
 interface Props {
   isOpenDrawer: boolean
@@ -12,6 +16,12 @@ export const AppDrawer = (props: Props) => {
   const { isOpenDrawer, closeDrawer } = props;
   const classes = useStyles();
   const history = useHistory();
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    const user: User = JSON.parse(ls.get(userKey))
+    setName(user.name);
+  }, [])
 
   const navigateTo = (path: string) => {
     closeDrawer();
@@ -23,7 +33,7 @@ export const AppDrawer = (props: Props) => {
       <div className={classes.list} >
         <List>
           <ListItem>
-            <h2>Ola! User</h2>
+            <h2>Ola! {name}</h2>
           </ListItem>
         </List>
         <Divider />

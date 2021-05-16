@@ -1,14 +1,13 @@
-import { makeStyles, AppBar, Toolbar, Typography, Button, IconButton } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import { makeStyles } from '@material-ui/core';
 import { useState } from 'react';
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { AppDrawer } from './components';
+import { AppBarHeader, AppDrawer } from './components';
 import { AboutScreen, HomeScreen, LoginScreen } from './views';
 
 export const App = () => {
   const classes = useStyles();
-  const [token, setToken] = useState('');
+  const [isLogged, setIsLogged] = useState(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
   const closeDrawer = () => {
@@ -20,11 +19,11 @@ export const App = () => {
   }
 
   const logout = () => {
-    setToken("");
+    setIsLogged(false);
   }
 
-  if (token === '') {
-    return <LoginScreen setToken={setToken} />
+  if (!isLogged) {
+    return <LoginScreen setIsLogged={setIsLogged} />
   }
 
   return (
@@ -34,17 +33,7 @@ export const App = () => {
           <nav>
             <div className={classes.root}>
               <AppDrawer isOpenDrawer={isOpenDrawer} closeDrawer={closeDrawer} />
-              <AppBar position="static">
-                <Toolbar>
-                  <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={openDrawer}>
-                    <MenuIcon />
-                  </IconButton>
-                  <Typography variant="h6" className={classes.title}>
-                    Beacon Tracker Admin
-                </Typography>
-                  <Button color="inherit" onClick={logout}>Logout</Button>
-                </Toolbar>
-              </AppBar>
+              <AppBarHeader logout={logout} openDrawer={openDrawer} />
             </div>
           </nav>
 
@@ -66,11 +55,5 @@ export const App = () => {
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
+  }
 }));

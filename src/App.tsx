@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AppBarHeader, AppDrawer } from './components';
-import { AboutScreen, HomeScreen, LoginScreen } from './views';
+import { DashboardScreen, HistoricoScreen, HomeScreen, LoginScreen, MapaScreen } from './views';
 
 export const App = () => {
   const classes = useStyles();
@@ -38,12 +38,10 @@ export const App = () => {
           </nav>
 
           <Switch>
-            <Route path="/about">
-              <AboutScreen />
-            </Route>
-            <Route path="/">
-              <HomeScreen />
-            </Route>
+            <Route path="/"><HomeScreen /></Route>
+            <Route path="/dashboard"><DashboardScreen /></Route>
+            <Route path="/mapa"><MapaScreen /></Route>
+            <Route path="/historico"><HistoricoScreen /></Route>
           </Switch>
         </div>
       </Router>

@@ -1,14 +1,14 @@
 import * as React from 'react'
-import "./AboutScreen.css"
+import "./MapaScreen.css"
 
 interface Props {
 
 }
 
-export const AboutScreen: React.FC<Props> = () => {
+export const MapaScreen: React.FC<Props> = () => {
   return (
     <div className="DivDetalhe">
-      <p>Tela detalhe</p>
+      <p>Tela mapa</p>
     </div>
   )
 }

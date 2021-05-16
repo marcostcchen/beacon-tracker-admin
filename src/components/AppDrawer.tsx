@@ -1,6 +1,6 @@
 import { Drawer, List, ListItem, Divider, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core'
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import { Home, Equalizer, Room, RestorePage } from '@material-ui/icons';
+
 import { useHistory } from 'react-router';
 import { useEffect, useState } from 'react';
 import { userKey } from '../utils';
@@ -40,16 +40,30 @@ export const AppDrawer = (props: Props) => {
         <List>
           <ListItem button onClick={() => navigateTo('/')}>
             <ListItemIcon>
-              <InboxIcon />
+              <Home />
             </ListItemIcon>
-            <ListItemText primary={"Inbox"} />
+            <ListItemText primary={"Home"} />
           </ListItem>
 
-          <ListItem button onClick={() => navigateTo('/about')}>
+          <ListItem button onClick={() => navigateTo('/dashboard')}>
             <ListItemIcon>
-              <MailIcon />
+              <Equalizer />
             </ListItemIcon>
-            <ListItemText primary={"Main"} />
+            <ListItemText primary={"Dashboard"} />
+          </ListItem>
+
+          <ListItem button onClick={() => navigateTo('/mapa')}>
+            <ListItemIcon>
+              <Room />
+            </ListItemIcon>
+            <ListItemText primary={"Mapa"} />
+          </ListItem>
+
+          <ListItem button onClick={() => navigateTo('/historico')}>
+            <ListItemIcon>
+              <RestorePage />
+            </ListItemIcon>
+            <ListItemText primary={"Historico"} />
           </ListItem>
         </List>
       </div>

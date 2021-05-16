@@ -2,6 +2,8 @@ import { Button, CircularProgress, Grid, makeStyles, Paper, TextField } from '@m
 import { useState } from 'react'
 import { tokenKey, userKey } from '../../utils';
 
+import { Place } from '@material-ui/icons'
+
 import * as fetch from './fetch';
 import './LoginScreen.css'
 var ls = require('local-storage');
@@ -35,16 +37,29 @@ export const LoginScreen = (props: Props) => {
     }, 1000)
   }
 
+  const handleEnter = (ev: any) => {
+    if (ev.key === 'Enter') {
+      makeLogin()
+    }
+  }
+
   return (
     <div className="container">
       <Paper className={classes.paper}>
         <Grid container direction="column" justify="center" alignItems="center" >
-          <h2>Beacon Tracker Admin</h2>
-          <div style={{ height: 100 }} />
-          <TextField label="Login" placeholder="Login" variant="outlined" onChange={(event) => setLogin(event.target.value)} />
-          <div style={{ height: 10 }} />
-          <TextField label="Senha" placeholder="Senha" variant="outlined" type="password" onChange={(event) => setPassword(event.target.value)} />
-          <div style={{ height: 30 }} />
+          <h1>Beacon Tracker Admin</h1>
+
+          <Place style={{ fontSize: 120 }} />
+          <div style={{ height: 20 }} />
+
+          <div style={{ width: '80%', margin: "0 auto 0" }}>
+            <TextField fullWidth label="Login" placeholder="Login" variant="outlined" onChange={(event) => setLogin(event.target.value)} />
+            <div style={{ height: 10 }} />
+
+            <TextField fullWidth label="Senha" placeholder="Senha" variant="outlined" type="password" onChange={(event) => setPassword(event.target.value)} onKeyPress={handleEnter} />
+            <div style={{ height: 30 }} />
+          </div>
+
           <Button className={classes.continueButton} variant="contained" onClick={makeLogin}>
             {!isLoading && "Entrar"}
             {isLoading && (
@@ -65,8 +80,8 @@ const useStyles = makeStyles((theme) => ({
     height: 800,
   },
   paper: {
-    width: 300,
-    height: 400,
+    width: 400,
+    height: 450,
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,

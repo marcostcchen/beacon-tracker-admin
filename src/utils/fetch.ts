@@ -1,5 +1,5 @@
-import { EfetuarLoginRequest, EfetuarLoginResponse } from '../../models';
-import { apiUrl } from '../../utils'
+import { EfetuarLoginRequest, EfetuarLoginResponse } from '../models';
+import { apiUrl } from '../utils'
 
 export const efetuarLogin: (login: string, password: string) => Promise<EfetuarLoginResponse | null> = (login, password) => {
   return new Promise(async (resolve) => {

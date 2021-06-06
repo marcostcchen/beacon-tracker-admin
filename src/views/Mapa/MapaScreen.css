@@ -1,4 +1,6 @@
-.DivDetalhe {
+.DivMapa {
   border: 1px solid black;
   background-color: blue;
+  height: max-content;
 }
+

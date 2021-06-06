@@ -1,11 +1,12 @@
 import { Button, CircularProgress, Grid, makeStyles, Paper, TextField } from '@material-ui/core'
 import { useState } from 'react'
-import { tokenKey, userKey } from '../../utils';
+import { efetuarLogin, Status, tokenKey, userKey } from '../../utils';
 
-import { Place } from '@material-ui/icons'
+import { Place } from '@material-ui/icons';
+import { toast } from 'react-toastify';
 
-import * as fetch from './fetch';
 import './LoginScreen.css'
+import { User } from '../../models';
 var ls = require('local-storage');
 interface Props {
   setIsLogged: (isLogged: boolean) => void,
@@ -20,16 +21,27 @@ export const LoginScreen = (props: Props) => {
 
   const makeLogin = async () => {
     setIsLoading(true)
-    const efetuarLoginResponse = await fetch.efetuarLogin(login, password);
+    const efetuarLoginResponse = await efetuarLogin(login, password);
 
     if (!!!efetuarLoginResponse) {
       setIsLogged(false);
       setIsLoading(false)
       return;
-      //ocorreu um erro inesperado
     }
 
-    ls.set(userKey, JSON.stringify(efetuarLoginResponse.user));
+    if (efetuarLoginResponse.status === Status.Error) {
+      setIsLogged(false);
+      setIsLoading(false)
+      toast.error(efetuarLoginResponse.message, { position: "bottom-right" });
+      return;
+    }
+
+    let user: User = {
+      ...efetuarLoginResponse.user,
+      password: password
+    }
+
+    ls.set(userKey, JSON.stringify(user));
     ls.set(tokenKey, efetuarLoginResponse.token);
     setTimeout(() => {
       setIsLoading(false);

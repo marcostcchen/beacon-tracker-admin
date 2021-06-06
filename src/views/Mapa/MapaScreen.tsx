@@ -23,8 +23,8 @@ export const MapaScreen: React.FC<Props> = () => {
 
   }, [])
 
-  const data = React.useMemo(
-    () => [
+  const data =
+    [
       {
         number: '1',
         name: 'Marcos',
@@ -37,22 +37,18 @@ export const MapaScreen: React.FC<Props> = () => {
         number: '3',
         name: 'Joao',
       },
-    ], []
-  )
+    ]
 
-  const columns: any = React.useMemo(
-    () => [
-      {
-        Header: 'ID',
-        accessor: 'number', // accessor is the "key" in the data
-      },
-      {
-        Header: 'Nome',
-        accessor: 'name',
-      },
-    ],
-    []
-  )
+  const columns: any = [
+    {
+      Header: 'ID',
+      accessor: 'number', // accessor is the "key" in the data
+    },
+    {
+      Header: 'Nome',
+      accessor: 'name',
+    },
+  ]
 
   const [markers, setMarkers] = useState<Array<Marker>>(
     [
@@ -90,6 +86,15 @@ export const MapaScreen: React.FC<Props> = () => {
           </Grid>
           <Grid item xs={5}>
             <Paper className={classes.paper}>
+              <h3>Tabela de Funcionários Ativos</h3>
+              <TableStyles>
+                <Table columns={columns} data={data} />
+              </TableStyles>
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <h3>Descrição das regiões</h3>
               <TableStyles>
                 <Table columns={columns} data={data} />
               </TableStyles>

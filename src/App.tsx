@@ -38,8 +38,8 @@ export const App = () => {
         setIsLogged(true);
         setIsLoading(false);
       }
+      setIsLoading(false);
     }
-
     validateLogin();
   }, [])
 

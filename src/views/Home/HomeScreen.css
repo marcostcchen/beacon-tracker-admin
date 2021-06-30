@@ -1,4 +1,15 @@
 .DivHome {
+  padding: 15px;
+  display: block;
+}
+
+.iconsContainer {
+  height: 400px;
+  flex-direction: row;
+}
+
+.cubo {
+  height: 50px; 
+  width: 50px;
   border: 1px solid black;
-  background-color: aquamarine;
 }

@@ -1,5 +1,10 @@
 .DivDetalhe {
-  padding: 20px;
+  padding: 10px 30px 40px 30px;
   background-color: white;
   align-items: center;
+}
+
+h1 {
+  margin-top: 5px;
+  margin-bottom: 10px;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { Grid, GridSpacing } from '@material-ui/core'
+import { Button, Grid, GridSpacing } from '@material-ui/core'
 import DashboardIcon from '../../img/DashboardIcon.png';
 import HistoricoIcon from '../../img/HistoricoIcon.png';
 import MapaIcon from '../../img/MapaIcon.png';
@@ -45,15 +45,15 @@ export const HomeScreen: React.FC<Props> = () => {
           <Grid container justify="center" alignItems="center" spacing={spacing}>
             <Grid style={styles.grid} item>
               <img style={styles.icons} src={DashboardIcon} alt="Dashboard Icon" />
-              <p style={styles.p}>Dashboard</p>
+              <Button style={styles.p}>Dashboard</Button>
             </Grid>
             <Grid style={styles.grid} item>
               <img style={styles.icons} src={HistoricoIcon} alt="Historico Icon" />
-              <p style={styles.p}>Histórico</p>
+              <Button style={styles.p}>Histórico</Button>
             </Grid>
             <Grid style={styles.grid} item>
               <img style={styles.icons} src={MapaIcon} alt="Mapa Icon" />
-              <p style={styles.p}>Mapa</p>
+              <Button style={styles.p}>Mapa</Button>
             </Grid>
           </Grid>
         </Grid>

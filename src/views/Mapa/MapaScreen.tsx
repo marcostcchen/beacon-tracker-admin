@@ -1,7 +1,7 @@
 import { Badge, Container, Grid, makeStyles, Paper, Tooltip } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import ImageMarker, { Marker, MarkerComponentProps } from 'react-image-marker';
-import { TableStyles } from './styles';
+import { TableDescricaoStyles, TableStyles } from './styles';
 import MapImage from '../../img/mapa.jpg';
 import { Table } from '../../components';
 import './MapaScreen.css'
@@ -95,9 +95,9 @@ export const MapaScreen: React.FC<Props> = () => {
         <Grid item xs={12}>
           <Paper className={classes.paper}>
             <h3>Descrição das regiões</h3>
-            <TableStyles>
+            <TableDescricaoStyles>
               <Table columns={columns} data={data} />
-            </TableStyles>
+            </TableDescricaoStyles>
           </Paper>
         </Grid>
       </Grid>

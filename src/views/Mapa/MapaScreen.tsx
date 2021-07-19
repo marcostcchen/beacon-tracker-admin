@@ -4,6 +4,7 @@ import ImageMarker, { Marker, MarkerComponentProps } from 'react-image-marker';
 import { TableStyles } from './styles';
 import MapImage from '../../img/mapa.jpg';
 import { Table } from '../../components';
+import './MapaScreen.css'
 interface Props {
 
 }
@@ -70,38 +71,36 @@ export const MapaScreen: React.FC<Props> = () => {
   };
 
   return (
-    <div className={classes.root}>
-      <Container>
-        <h2>Mapa do frigorífico</h2>
-        <Grid container spacing={3}>
-          <Grid item xs={7}>
-            <Paper className={classes.paper}>
-              <h3>Visão Geral</h3>
-              <ImageMarker
-                src={MapImage}
-                markers={markers}
-                markerComponent={CustomMarker}
-              />
-            </Paper>
-          </Grid>
-          <Grid item xs={5}>
-            <Paper className={classes.paper}>
-              <h3>Tabela de Funcionários Ativos</h3>
-              <TableStyles>
-                <Table columns={columns} data={data} />
-              </TableStyles>
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <h3>Descrição das regiões</h3>
-              <TableStyles>
-                <Table columns={columns} data={data} />
-              </TableStyles>
-            </Paper>
-          </Grid>
+    <div className="DivMapa">
+      <h2>Mapa</h2>
+      <Grid container spacing={1}>
+        <Grid item xs={7}>
+          <Paper className={classes.paper}>
+            <h3>Funcionários por área</h3>
+            <ImageMarker
+              src={MapImage}
+              markers={markers}
+              markerComponent={CustomMarker}
+            />
+          </Paper>
         </Grid>
-      </Container>
+        <Grid item xs={5}>
+          <Paper className={classes.paper}>
+            <h3>Funcionários Ativos</h3>
+            <TableStyles>
+              <Table columns={columns} data={data} />
+            </TableStyles>
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
+            <h3>Descrição das regiões</h3>
+            <TableStyles>
+              <Table columns={columns} data={data} />
+            </TableStyles>
+          </Paper>
+        </Grid>
+      </Grid>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 export const TableStyles = styled.div`
 padding: 1rem;
+height: 415px;
 
 table {
   border-spacing: 0;

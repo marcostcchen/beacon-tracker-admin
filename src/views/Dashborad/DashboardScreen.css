@@ -1,4 +1,5 @@
 .DivDetalhe {
-  border: 1px solid black;
-  background-color: blue;
+  padding: 20px;
+  background-color: white;
+  align-items: center;
 }

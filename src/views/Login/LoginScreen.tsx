@@ -38,6 +38,7 @@ export const LoginScreen = (props: Props) => {
 
     let user: User = {
       ...efetuarLoginResponse.user,
+      login: login,
       password: password
     }
 

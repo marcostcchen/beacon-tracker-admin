@@ -1,1 +1,1 @@
-export const apiUrl = 'https://localhost:44322/api';
+export const apiUrl = 'http://localhost/BeaconTrackerApi/api';

@@ -19,6 +19,7 @@ export const App = () => {
   useEffect(() => {
     const validateLogin = async () => {
       const user: User | null = JSON.parse(ls.get(userKey))
+      
       if (user != null) {
         const efetuarLoginResponse = await efetuarLogin(user.login, user.password);
         if (!!!efetuarLoginResponse) {

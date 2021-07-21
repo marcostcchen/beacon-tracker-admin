@@ -43,7 +43,7 @@ export const LoginScreen = (props: Props) => {
     }
 
     ls.set(userKey, JSON.stringify(user));
-    ls.set(tokenKey, efetuarLoginResponse.token);
+    ls.set(tokenKey, 'bearer ' + efetuarLoginResponse.token);
     setTimeout(() => {
       setIsLoading(false);
       setIsLogged(true);

@@ -1,7 +1,7 @@
 import { Roles } from "../utils";
 
 export interface User {
-  idUser: number,
+  id: number,
   name: string,
   password:string,
   login: string,

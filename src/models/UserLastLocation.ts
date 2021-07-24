@@ -6,6 +6,7 @@ export interface UserLastLocation {
   lastLocation: LastLocation,
   isWorking: boolean,
   maxStayMinutes: number,
-  startWorkingTime: string
+  startWorkingTime: string,
+  userId_OneSignal: string
 }
 

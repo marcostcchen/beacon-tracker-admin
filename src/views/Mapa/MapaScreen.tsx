@@ -121,11 +121,11 @@ export const MapaScreen: React.FC<Props> = () => {
           }
         }
       } else if (user.lastLocation.regionName == "Armazem de caixas") {
-        marker = { top: 50, left: 45, itemNumber: index }
+        marker = { top: 70, left: 45, itemNumber: index }
         let lastMarker = newMarkers[newMarkers.length - 1];
         if (lastMarker && lastMarker.top == marker.top) {
           marker = {
-            top: 50,
+            top: 70,
             left: Number(parseInt(lastMarker.left.toString()) + 5),
             itemNumber: index
           }

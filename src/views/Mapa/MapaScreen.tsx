@@ -189,8 +189,8 @@ export const MapaScreen: React.FC<Props> = () => {
     <div className="DivMapa">
       <h2>Mapa</h2>
       <Grid container spacing={1}>
-        <Grid item xs={7}>
-          <Paper className={classes.paper} style={{ height: 530 }}>
+        <Grid item xs={6}>
+          <Paper className={classes.paper} style={{ height: 430 }}>
             <h3>Funcionários por área</h3>
             {markers.length > 0 && (
               <ImageMarker
@@ -201,8 +201,8 @@ export const MapaScreen: React.FC<Props> = () => {
             )}
           </Paper>
         </Grid>
-        <Grid item xs={5}>
-          <Paper className={classes.paper} style={{ height: 530 }}>
+        <Grid item xs={6}>
+          <Paper className={classes.paper} style={{ height: 430 }}>
             <h3>Funcionários Ativos</h3>
             <TableStyles>
               <Table columns={columns} data={tableUsersRows} openEnviarNotificacaoModal={openEnviarNotificacaoModal} />
@@ -214,7 +214,7 @@ export const MapaScreen: React.FC<Props> = () => {
         </Grid>
 
         <Grid item xs={12}>
-          <Paper className={classes.paper} style={{ height: 530 }}>
+          <Paper className={classes.paper} style={{ height: 430 }}>
             <h3>Histórico de Notificações</h3>
             <TableStyles>
 
@@ -230,10 +230,10 @@ export const MapaScreen: React.FC<Props> = () => {
                 <tbody>
                   {listNotificacoes.map((notificacao, index) => (
                     <tr key={index}>
-                      <td>{formatDateHour(notificacao.horaEnvio)}</td>
-                      <td>{notificacao.nome}</td>
-                      <td>{notificacao.titulo}</td>
-                      <td>{notificacao.descricao}</td>
+                      <td style={{ fontSize: 14}}>{formatDateHour(notificacao.horaEnvio)}</td>
+                      <td style={{ fontSize: 14}}>{notificacao.nome}</td>
+                      <td style={{ fontSize: 14}}>{notificacao.titulo}</td>
+                      <td style={{ fontSize: 14}}>{notificacao.descricao}</td>
                     </tr>
                   ))}
                 </tbody>

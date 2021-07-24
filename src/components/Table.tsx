@@ -18,7 +18,7 @@ export const Table: React.FC<Props> = (props) => {
 
   // Render the UI for your table
   return (
-    <table {...getTableProps()}>
+    <table {...getTableProps()} style={{width: "100%"}}>
       <thead>
         {headerGroups.map((headerGroup: any, i: number) => (
           <tr key={i} {...headerGroup.getHeaderGroupProps()}>

@@ -8,6 +8,8 @@ import './MapaScreen.css'
 import { Status } from '../../utils';
 import { toast } from 'react-toastify';
 import * as fetchUtils from './fetch';
+import { Notificacao } from '../../models';
+import { formatDateHour } from '../../utils';
 
 
 interface TableUserRow {
@@ -30,12 +32,15 @@ export const MapaScreen: React.FC<Props> = () => {
   const [notifTitulo, setNotifTitulo] = useState("");
   const [notifDescricao, setNotifDescricao] = useState("");
 
+  const [listNotificacoes, setListNotificacoes] = useState<Array<Notificacao>>([]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenModalNotification, setIsOpenModalNotification] = useState(false);
 
 
   useEffect(() => {
     getUsersInfo();
+    listarNotificacoes();
 
     setInterval(() => {
       getUsersInfo();
@@ -110,17 +115,17 @@ export const MapaScreen: React.FC<Props> = () => {
         let lastMarker = newMarkers[newMarkers.length - 1];
         if (lastMarker && lastMarker.top == marker.top) {
           marker = {
-            top: 30,
+            top: 60,
             left: Number(parseInt(lastMarker.left.toString()) + 5),
             itemNumber: index
           }
         }
       } else if (user.lastLocation.regionName == "Armazem de caixas") {
-        marker = { top: 50, left: 50, itemNumber: index }
+        marker = { top: 50, left: 45, itemNumber: index }
         let lastMarker = newMarkers[newMarkers.length - 1];
         if (lastMarker && lastMarker.top == marker.top) {
           marker = {
-            top: 80,
+            top: 50,
             left: Number(parseInt(lastMarker.left.toString()) + 5),
             itemNumber: index
           }
@@ -150,15 +155,24 @@ export const MapaScreen: React.FC<Props> = () => {
   }
 
   const enviarNotificacao = async () => { //Roda so no chrome
-    let userId = tableUsersRows.find(user => user.index == sendNotificationUserIndex)?.userId
-    console.log(userId)
-    if (userId) await fetchUtils.enviarNotificacao(notifTitulo, notifDescricao, userId);
+    setIsOpenModalNotification(false);
+    let user = tableUsersRows.find(user => user.index == sendNotificationUserIndex)
+    if (user) await fetchUtils.enviarNotificacao(notifTitulo, notifDescricao, user.userId);
+    if (user) await fetchUtils.saveNotificacaoMongo(notifTitulo, notifDescricao, user.userId, user.name);
 
     toast.success("Notificação enviada com sucesso!")
     setNotifTitulo("");
     setNotifDescricao("");
     setSendNotificationUserIndex(-1);
-    setIsOpenModalNotification(false);
+
+    setTimeout(() => {
+      listarNotificacoes();
+    }, 2000)
+  }
+
+  const listarNotificacoes = async () => {
+    const res = await fetchUtils.listarNotificacoes();
+    setListNotificacoes(res.listaNotificacoes)
   }
 
   const CustomMarker = (props: MarkerComponentProps) => {
@@ -176,7 +190,7 @@ export const MapaScreen: React.FC<Props> = () => {
       <h2>Mapa</h2>
       <Grid container spacing={1}>
         <Grid item xs={7}>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paper} style={{ height: 530 }}>
             <h3>Funcionários por área</h3>
             {markers.length > 0 && (
               <ImageMarker
@@ -188,13 +202,42 @@ export const MapaScreen: React.FC<Props> = () => {
           </Paper>
         </Grid>
         <Grid item xs={5}>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paper} style={{ height: 530 }}>
             <h3>Funcionários Ativos</h3>
             <TableStyles>
               <Table columns={columns} data={tableUsersRows} openEnviarNotificacaoModal={openEnviarNotificacaoModal} />
               {isLoading && (
                 <CircularProgress size={30} style={{ marginTop: 20 }} />
               )}
+            </TableStyles>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Paper className={classes.paper} style={{ height: 530 }}>
+            <h3>Histórico de Notificações</h3>
+            <TableStyles>
+
+              <table style={{ width: '100%' }}>
+                <thead>
+                  <tr>
+                    <th>Hora de envio</th>
+                    <th>Nome</th>
+                    <th>Título</th>
+                    <th>Descrição</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {listNotificacoes.map((notificacao, index) => (
+                    <tr key={index}>
+                      <td>{formatDateHour(notificacao.horaEnvio)}</td>
+                      <td>{notificacao.nome}</td>
+                      <td>{notificacao.titulo}</td>
+                      <td>{notificacao.descricao}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </TableStyles>
           </Paper>
         </Grid>

@@ -18,11 +18,11 @@ export const App = () => {
 
   useEffect(() => {
     const validateLogin = async () => {
-      const user: User | null = ls.get(userKey)
-      
-      if (user != null) {
+      const userString: string | null = ls.get(userKey)
+      if (userString != null) {
+        const user = JSON.parse(userString)
         const efetuarLoginResponse = await efetuarLogin(user.login, user.password);
-        if (!!!efetuarLoginResponse) {
+        if (efetuarLoginResponse == null) {
           setIsLogged(false);
           setIsLoading(false);
           return;
@@ -34,8 +34,8 @@ export const App = () => {
           toast.error(efetuarLoginResponse.message, { position: "bottom-right" });
           return;
         }
-
-        ls.set(tokenKey, efetuarLoginResponse.token);
+        
+        ls.set(tokenKey, "Bearer " + efetuarLoginResponse.token);
         setIsLogged(true);
         setIsLoading(false);
       }

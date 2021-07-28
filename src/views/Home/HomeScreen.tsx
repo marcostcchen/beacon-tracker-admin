@@ -6,12 +6,15 @@ import HistoricoIcon from '../../img/HistoricoIcon.png';
 import MapaIcon from '../../img/MapaIcon.png';
 
 import './HomeScreen.css'
+import { useHistory } from 'react-router-dom';
 
 interface Props {
 
 }
 
 export const HomeScreen: React.FC<Props> = () => {
+  const history = useHistory();
+
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
@@ -45,15 +48,15 @@ export const HomeScreen: React.FC<Props> = () => {
           <Grid container justify="center" alignItems="center" spacing={spacing}>
             <Grid style={styles.grid} item>
               <img style={styles.icons} src={DashboardIcon} alt="Dashboard Icon" />
-              <Button style={styles.p}>Dashboard</Button>
+              <Button style={styles.p} variant="contained" onClick={() => history.push("/dashboard")}>Dashboard</Button>
             </Grid>
             <Grid style={styles.grid} item>
               <img style={styles.icons} src={HistoricoIcon} alt="Historico Icon" />
-              <Button style={styles.p}>Histórico</Button>
+              <Button style={styles.p} variant="contained" onClick={() => history.push("/historico")}>Histórico</Button>
             </Grid>
             <Grid style={styles.grid} item>
               <img style={styles.icons} src={MapaIcon} alt="Mapa Icon" />
-              <Button style={styles.p}>Mapa</Button>
+              <Button style={styles.p} variant="contained" onClick={() => history.push("/mapa")}>Mapa</Button>
             </Grid>
           </Grid>
         </Grid>
@@ -67,11 +70,16 @@ const styles: any = {
     height: 140,
   },
   grid: {
+    alignItens: 'center',
+    justifyContent:'center',
+    textAlign:'center',
     padding: 20,
-    marginLeft: 40, 
-    marginRight: 40
+    marginLeft: 40,
+    marginRight: 40,
+    width: 300
   },
   p: {
+    width: '100%',
     textAlign: 'center'
   }
 }

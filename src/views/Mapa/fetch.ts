@@ -82,10 +82,12 @@ export const enviarNotificacao: (titulo: string, descricao: string, userId: stri
     })
       .then(res => res.json())
       .then((response: ListarUltimasLocalizacoesRes) => {
+        console.log(response)
         resolve(response);
         return;
       })
       .catch(err => {
+        console.log(err)
         resolve(null);
         return;
       });

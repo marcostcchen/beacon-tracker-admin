@@ -157,9 +157,14 @@ export const MapaScreen: React.FC<Props> = () => {
   const enviarNotificacao = async () => { //Roda so no chrome
     setIsOpenModalNotification(false);
     let user = tableUsersRows.find(user => user.index == sendNotificationUserIndex)
-    if (user) await fetchUtils.enviarNotificacao(notifTitulo, notifDescricao, user.userId);
-    if (user) await fetchUtils.saveNotificacaoMongo(notifTitulo, notifDescricao, user.userId, user.name);
+    let resEnviarNotif;
+    if (user) resEnviarNotif = await fetchUtils.enviarNotificacao(notifTitulo, notifDescricao, user.userId);
+    if (resEnviarNotif == null) {
+      toast.error("Ocorreu um erro ao enviar a notificacao!")
+      return;
+    }
 
+    if (user) await fetchUtils.saveNotificacaoMongo(notifTitulo, notifDescricao, user.userId, user.name);
     toast.success("Notificação enviada com sucesso!")
     setNotifTitulo("");
     setNotifDescricao("");
@@ -230,10 +235,10 @@ export const MapaScreen: React.FC<Props> = () => {
                 <tbody>
                   {listNotificacoes.map((notificacao, index) => (
                     <tr key={index}>
-                      <td style={{ fontSize: 14}}>{formatDateHour(notificacao.horaEnvio)}</td>
-                      <td style={{ fontSize: 14}}>{notificacao.nome}</td>
-                      <td style={{ fontSize: 14}}>{notificacao.titulo}</td>
-                      <td style={{ fontSize: 14}}>{notificacao.descricao}</td>
+                      <td style={{ fontSize: 14 }}>{formatDateHour(notificacao.horaEnvio)}</td>
+                      <td style={{ fontSize: 14 }}>{notificacao.nome}</td>
+                      <td style={{ fontSize: 14 }}>{notificacao.titulo}</td>
+                      <td style={{ fontSize: 14 }}>{notificacao.descricao}</td>
                     </tr>
                   ))}
                 </tbody>

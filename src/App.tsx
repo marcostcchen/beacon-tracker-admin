@@ -34,7 +34,7 @@ export const App = () => {
           toast.error(efetuarLoginResponse.message, { position: "bottom-right" });
           return;
         }
-        
+
         ls.set(tokenKey, "Bearer " + efetuarLoginResponse.token);
         setIsLogged(true);
         setIsLoading(false);
@@ -58,10 +58,8 @@ export const App = () => {
 
   if (isLoading) {
     return (
-      <div className={classes.root}>
-        <div style={{ width: '100%', height: 800, margin: "0 auto 0" }}>
-          <CircularProgress size={30} />
-        </div>
+      <div className={classes.root} style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+        <CircularProgress size={50} />
       </div>
     )
   }

@@ -59,45 +59,9 @@ export const listarNotificacoes: () => Promise<any | null> = () => {
   })
 }
 
-
-export const enviarNotificacao: (titulo: string, descricao: string, userId: string) => Promise<ListarUltimasLocalizacoesRes | null> = (titulo, descricao, userId) => {
+export const enviarNotificacao: (titulo: string, descricao: string, userId: string, nome: string) => Promise<any | null> = (titulo, descricao, userId, nome) => {
   return new Promise(async (resolve) => {
-    const url = "https://onesignal.com/api/v1/notifications";
-
-    const json = {
-      "app_id": "b3e53c7e-4779-4ec1-b23c-d2ebd098a66b",
-      "include_player_ids": [userId],
-      "data": { "description": "Enviar Notificacao" },
-      "headings": { "en": titulo, "pt": titulo },
-      "contents": { "en": descricao, "pt": descricao }
-    }
-
-    fetch(`${url}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': oneSignalToken,
-      },
-      body: JSON.stringify(json)
-    })
-      .then(res => res.json())
-      .then((response: ListarUltimasLocalizacoesRes) => {
-        console.log(response)
-        resolve(response);
-        return;
-      })
-      .catch(err => {
-        console.log(err)
-        resolve(null);
-        return;
-      });
-  })
-}
-
-
-export const saveNotificacaoMongo: (titulo: string, descricao: string, userId: string, nome: string) => Promise<any | null> = (titulo, descricao, userId, nome) => {
-  return new Promise(async (resolve) => {
-    const url = "/inserir-notificacao";
+    const url = "/enviar-notificacao";
     const token = ls.get(tokenKey);
 
     const json = {

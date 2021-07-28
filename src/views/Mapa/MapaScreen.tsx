@@ -157,14 +157,14 @@ export const MapaScreen: React.FC<Props> = () => {
   const enviarNotificacao = async () => { //Roda so no chrome
     setIsOpenModalNotification(false);
     let user = tableUsersRows.find(user => user.index == sendNotificationUserIndex)
-    let resEnviarNotif;
-    if (user) resEnviarNotif = await fetchUtils.enviarNotificacao(notifTitulo, notifDescricao, user.userId);
-    if (resEnviarNotif == null) {
-      toast.error("Ocorreu um erro ao enviar a notificacao!")
+    let resEnviarNotif = null;
+
+    if (user) resEnviarNotif = await fetchUtils.enviarNotificacao(notifTitulo, notifDescricao, user.userId, user.name);
+
+    if(resEnviarNotif == null) {
+      toast.error("Ocorreu um erro durante o envio de notificação!")
       return;
     }
-
-    if (user) await fetchUtils.saveNotificacaoMongo(notifTitulo, notifDescricao, user.userId, user.name);
     toast.success("Notificação enviada com sucesso!")
     setNotifTitulo("");
     setNotifDescricao("");

@@ -1,61 +1,98 @@
 import { DataGrid, GridColDef } from '@material-ui/data-grid'
-import * as React from 'react'
+import React, { useEffect, useState } from 'react'
 import Collapsible from 'react-collapsible'
 import "./HistoricoScreen.css"
+import * as fetchUtils from './fetch';
+import { formatDateHour, Status } from '../../utils';
+import { toast } from 'react-toastify';
+import { UserWorkSession } from '../../models';
+
 interface Props {
 
 }
 
 const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'firstName', headerName: 'First name', width: 300 },
-  { field: 'lastName', headerName: 'Last name', width: 300 },
-  {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
-    width: 300,
-  },
-  {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    width: 300,
-  },
-];
-
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+  { field: 'regionName', headerName: 'Região', width: 150 },
+  { field: 'startWorkingTime', headerName: 'Início', width: 200, },
+  { field: 'startRestingTime', headerName: 'Início Descanço', width: 200, },
+  { field: 'finishRestingTime', headerName: 'Fim Descanço', width: 200, },
+  { field: 'maxStayMinutes', headerName: 'T.Máx.Permitido(s)', width: 200 },
+  { field: 'minRestMinutes', headerName: 'T.Mín.Descanso(s)', width: 200, },
 ];
 
 export const HistoricoScreen: React.FC<Props> = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [listUserWorkSession, setListUserWorkSession] = useState<Array<UserWorkSession>>([])
+
+  useEffect(() => {
+    getListWorkingSessions();
+  }, [])
+
+  const getListWorkingSessions = async () => {
+    const res = await fetchUtils.listWorkingSessions();
+    if (!!!res) {
+      setIsLoading(false)
+      return;
+    }
+
+    if (res.status === Status.Error) {
+      setIsLoading(false)
+      toast.error(res.message, { position: "bottom-right" });
+      return;
+    }
+    setListUserWorkSession(res.usersWorkingSessions); 
+  }
+
   return (
     <div className="DivHistorico">
       <h2>Histórico de usuários</h2>
-      <div style={containerStyles}>
-        <Collapsible trigger="Start here +">
-          <div style={{ height: 400, width: '100%' }}>
-            <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
-          </div>
-        </Collapsible>
+      <div style={styles.container}>
+        {listUserWorkSession.map((userWorkSession, index) => {
+          let rows: any = [];
+          userWorkSession.listWorkSessions.map(workSession => {
+            let row = {
+              id: index + 1 + Math.random(),
+              regionName: workSession.regionName,
+              maxStayMinutes: workSession.maxStayMinutes,
+              minRestMinutes: workSession.minRestMinutes,
+              startWorkingTime: formatDateHour(workSession.startWorkingTime),
+              startRestingTime: formatDateHour(workSession.startRestingTime),
+              finishRestingTime: formatDateHour(workSession.finishRestingTime)
+            }
+            rows.push(row);
+          })
+
+          return (
+            <Collapsible key={index} trigger={
+              <div style={styles.title}>
+                <div style={{ width: "79%" }}>{userWorkSession.name}</div>
+                <div style={{ width: "20%", textAlign: 'right' }}>v</div>
+              </div>
+            }>
+              <div style={{ height: 400, width: '100%' }}>
+                <DataGrid rows={rows} columns={columns} pageSize={5} />
+              </div>
+            </Collapsible>
+          )
+        })}
       </div>
     </div>
   )
 }
 
-const containerStyles: React.CSSProperties = {
-  border: '1px solid black',
-  padding: 10,
-  borderRadius: 10,
-  borderBottomLeftRadius: 0,
-  borderBottomRightRadius: 0,
+const styles: any = {
+  container: {
+    border: '1px solid black',
+    width: '100%',
+  },
+  title: {
+    width: "98.5%",
+    padding: 10,
+    borderBottom: '1px solid black',
+    flexDirection: 'row',
+    display: 'flex',
+    cursor: 'pointer',
+    backgroundColor: '#3f51b563'
+  }
 }
+

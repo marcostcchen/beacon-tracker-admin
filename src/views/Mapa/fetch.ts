@@ -1,5 +1,5 @@
 import { UserLastLocation } from "../../models";
-import { apiUrl, oneSignalToken, Status, tokenKey } from "../../utils";
+import { apiUrl, Status, tokenKey } from "../../utils";
 var ls = require('local-storage');
 
 interface ListarUltimasLocalizacoesRes {

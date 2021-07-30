@@ -11,5 +11,7 @@ export const formatDateHour = (dateString: string) => {
   let minuteString = minute.toString();
   if (minute < 10) minuteString = "0" + minuteString
 
+  if(day.toString() === 'NaN') return ' - '
+
   return day + "/" + month + "/" + year + " " + hour + ':' + minuteString;
 }

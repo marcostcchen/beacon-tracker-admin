@@ -29,10 +29,16 @@ export const HistoricoScreen: React.FC<Props> = () => {
   const [listUserWorkSession, setListUserWorkSession] = useState<Array<UserWorkSession>>([])
 
   useEffect(() => {
+    setInterval(() => {
+      getListWorkingSessions();
+    }, 5000)
+
     getListWorkingSessions();
   }, [])
 
   const getListWorkingSessions = async () => {
+    setIsLoading(true);
+
     const res = await fetchUtils.listWorkingSessions();
     if (!!!res) {
       setIsLoading(false)
@@ -51,48 +57,48 @@ export const HistoricoScreen: React.FC<Props> = () => {
 
   return (
     <div className="DivHistorico">
-      <h2>Histórico de usuários</h2>
-      {isLoading && (
-        <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <CircularProgress size={30} />
-        </div>
-      )}
+      <div style={{ flexDirection: 'row', display: 'flex' }}>
+        <h2 style={{ width: '20%' }}>Histórico de usuários</h2>
+        {isLoading && (
+          <div style={{ width: '30%', display: 'flex', alignItems: 'center', }}>
+            <CircularProgress size={30} />
+          </div>
+        )}
+      </div>
 
-      {!isLoading && (
-        <div style={styles.container}>
-          {listUserWorkSession.map((userWorkSession, index) => {
-            let rows: any = [];
-            userWorkSession.listWorkSessions.map(workSession => {
-              let row = {
-                id: index + 1 + Math.random(),
-                regionName: workSession.regionName,
-                maxStayMinutes: workSession.maxStayMinutes,
-                minRestMinutes: workSession.minRestMinutes,
-                workedTime: ((new Date(workSession.startRestingTime).getTime() - new Date(workSession.startWorkingTime).getTime())/1000).toFixed(0),
-                restedTime: ((new Date(workSession.finishRestingTime).getTime() - new Date(workSession.startRestingTime).getTime())/1000).toFixed(0),
-                date: formatDate(workSession.startWorkingTime), 
-                startWorkingTime: formatHour(workSession.startWorkingTime),
-                startRestingTime: formatHour(workSession.startRestingTime),
-                finishRestingTime: formatHour(workSession.finishRestingTime)
-              }
-              rows.push(row);
-            })
+      <div style={styles.container}>
+        {listUserWorkSession.map((userWorkSession, index) => {
+          let rows: any = [];
+          userWorkSession.listWorkSessions.map(workSession => {
+            let row = {
+              id: index + 1 + Math.random(),
+              regionName: workSession.regionName,
+              maxStayMinutes: workSession.maxStayMinutes,
+              minRestMinutes: workSession.minRestMinutes,
+              workedTime: ((new Date(workSession.startRestingTime).getTime() - new Date(workSession.startWorkingTime).getTime()) / 1000).toFixed(0),
+              restedTime: ((new Date(workSession.finishRestingTime).getTime() - new Date(workSession.startRestingTime).getTime()) / 1000).toFixed(0),
+              date: formatDate(workSession.startWorkingTime),
+              startWorkingTime: formatHour(workSession.startWorkingTime),
+              startRestingTime: formatHour(workSession.startRestingTime),
+              finishRestingTime: formatHour(workSession.finishRestingTime)
+            }
+            rows.push(row);
+          })
 
-            return (
-              <Collapsible key={index} trigger={
-                <div style={styles.title}>
-                  <div style={{ width: "79%" }}>{userWorkSession.name}</div>
-                  <div style={{ width: "20%", textAlign: 'right' }}>v</div>
-                </div>
-              }>
-                <div style={{ height: 400, width: '100%' }}>
-                  <DataGrid rows={rows} columns={columns} pageSize={5} />
-                </div>
-              </Collapsible>
-            )
-          })}
-        </div>
-      )}
+          return (
+            <Collapsible key={index} trigger={
+              <div style={styles.title}>
+                <div style={{ width: "79%" }}>{userWorkSession.name}</div>
+                <div style={{ width: "20%", textAlign: 'right' }}>v</div>
+              </div>
+            }>
+              <div style={{ height: 400, width: '100%' }}>
+                <DataGrid rows={rows} columns={columns} pageSize={5} />
+              </div>
+            </Collapsible>
+          )
+        })}
+      </div>
     </div>
   )
 }

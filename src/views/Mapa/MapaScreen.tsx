@@ -5,7 +5,7 @@ import { TableStyles } from './styles';
 import MapImage from '../../img/mapa.jpg';
 import { Table } from '../../components';
 import './MapaScreen.css'
-import { Status } from '../../utils';
+import { convertWorkingSessionToString, getMaxTimeAllowed, Status, WorkingStatus } from '../../utils';
 import { toast } from 'react-toastify';
 import * as fetchUtils from './fetch';
 import { Notificacao } from '../../models';
@@ -16,8 +16,9 @@ interface TableUserRow {
   index: number,
   name: string,
   lastLocation: string,
+  operation: string,
   timeLeft: number,
-  userId: string,
+  userId_OneSignal: string
 }
 
 interface Props {
@@ -62,6 +63,10 @@ export const MapaScreen: React.FC<Props> = () => {
       accessor: 'lastLocation',
     },
     {
+      Header: 'Operação',
+      accessor: 'operation',
+    },
+    {
       Header: 'T. Restante (s)',
       accessor: 'timeLeft',
     },
@@ -89,28 +94,29 @@ export const MapaScreen: React.FC<Props> = () => {
     let newMarkers: Array<MarkerComponentProps> = [];
 
     let index = 1
+
     res.listUsuarios.forEach(user => {
-      if (user.isWorking) {
-        let startWorkingTime = new Date(user.startWorkingTime);
-        let nowTime = new Date();
+      if (user.workSessions == null || user.workSessions.length == 0) return;
+      let lastWorkSession = user.workSessions[0];
 
-        let timeLeft = (startWorkingTime.getTime() + user.maxStayMinutes * 1000 - nowTime.getTime()) / 1000  //milisegundos 
-        if (timeLeft < 0) timeLeft = 0;
+      let maxTimeAllowed = getMaxTimeAllowed(lastWorkSession.regionName);
+      let timeLeft = (new Date(lastWorkSession.startTime).getTime() + (maxTimeAllowed * 1000) - new Date().getTime()) / 1000 //miliseconds
+      if (timeLeft < 0) timeLeft = 0;
 
-        let tableUserRow: TableUserRow = {
-          index: index,
-          name: user.name,
-          lastLocation: user.lastLocation.regionName,
-          timeLeft: parseInt(timeLeft.toFixed(0)),
-          userId: user.userId_OneSignal
-        }
-
-        listTableUsersRows.push(tableUserRow);
-        index++;
+      let tableUserRow: TableUserRow = {
+        userId_OneSignal: user.userId_OneSignal,
+        index: index,
+        name: user.name,
+        operation: convertWorkingSessionToString(lastWorkSession.status),
+        lastLocation: lastWorkSession.regionName,
+        timeLeft: parseInt(timeLeft.toFixed(0)),
       }
 
+      listTableUsersRows.push(tableUserRow);
+      index++;
+
       let marker: MarkerComponentProps;
-      if (user.lastLocation.regionName == "Freezer") {
+      if (lastWorkSession.regionName == "Freezer") {
         marker = { top: 60, left: 5, itemNumber: index }
         let lastMarker = newMarkers[newMarkers.length - 1];
         if (lastMarker && lastMarker.top == marker.top) {
@@ -120,7 +126,7 @@ export const MapaScreen: React.FC<Props> = () => {
             itemNumber: index
           }
         }
-      } else if (user.lastLocation.regionName == "Armazem de caixas") {
+      } else if (lastWorkSession.regionName == "Armazem de caixas") {
         marker = { top: 70, left: 45, itemNumber: index }
         let lastMarker = newMarkers[newMarkers.length - 1];
         if (lastMarker && lastMarker.top == marker.top) {
@@ -159,9 +165,9 @@ export const MapaScreen: React.FC<Props> = () => {
     let user = tableUsersRows.find(user => user.index == sendNotificationUserIndex)
     let resEnviarNotif = null;
 
-    if (user) resEnviarNotif = await fetchUtils.enviarNotificacao(notifTitulo, notifDescricao, user.userId, user.name);
+    if (user) resEnviarNotif = await fetchUtils.enviarNotificacao(notifTitulo, notifDescricao, user.userId_OneSignal, user.name);
 
-    if(resEnviarNotif == null) {
+    if (resEnviarNotif == null) {
       toast.error("Ocorreu um erro durante o envio de notificação!")
       return;
     }

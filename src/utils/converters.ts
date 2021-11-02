@@ -64,3 +64,16 @@ export const convertWorkingSessionToString = (workingStatus: WorkingStatus) => {
       return "Finalizado";
   }
 }
+
+export const getMaxTimeAllowed = (regionName: string) => {
+  switch (regionName) {
+    case "Freezer":
+      return 180;
+    case "Armazem de caixas":
+      return 600;
+    case "Sala de Corte":
+      return 300;
+    default:
+      return 300
+  }
+}

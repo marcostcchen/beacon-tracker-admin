@@ -1,11 +1,11 @@
-import { UserLastLocation } from "../../models";
+import { User } from "../../models";
 import { apiUrl, Status, tokenKey } from "../../utils";
 var ls = require('local-storage');
 
 interface ListarUltimasLocalizacoesRes {
   status: Status,
   message: string,
-  listUsuarios: Array<UserLastLocation>
+  listUsuarios: Array<User>
 }
 
 export const listarUltimasLocalizacoes: () => Promise<ListarUltimasLocalizacoesRes | null> = () => {
@@ -14,7 +14,7 @@ export const listarUltimasLocalizacoes: () => Promise<ListarUltimasLocalizacoesR
     const token = ls.get(tokenKey);
 
     fetch(`${apiUrl}${url}`, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': token == null ? '' : token,
@@ -40,7 +40,7 @@ export const listarNotificacoes: () => Promise<any | null> = () => {
     const token = ls.get(tokenKey);
 
     fetch(`${apiUrl}${url}`, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': token == null ? '' : token,
@@ -59,13 +59,13 @@ export const listarNotificacoes: () => Promise<any | null> = () => {
   })
 }
 
-export const enviarNotificacao: (titulo: string, descricao: string, userId: string, nome: string) => Promise<any | null> = (titulo, descricao, userId, nome) => {
+export const enviarNotificacao: (titulo: string, descricao: string, userId_OneSignal: string, nome: string) => Promise<any | null> = (titulo, descricao, userId_OneSignal, nome) => {
   return new Promise(async (resolve) => {
     const url = "/enviar-notificacao";
     const token = ls.get(tokenKey);
 
     const json = {
-      "userId_OneSignal": userId,
+      "userId_OneSignal": userId_OneSignal,
       "nome": nome,
       "horaEnvio": new Date(),
       "titulo": titulo,

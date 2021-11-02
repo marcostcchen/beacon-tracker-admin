@@ -1,8 +1,13 @@
+import { WorkingStatus } from "../utils";
+
 export interface WorkSession {
-  regionName: string
-  maxStayMinutes: string
-  minRestMinutes: string
-  startWorkingTime: string
-  startRestingTime: string
-  finishRestingTime: string
+  startTime: Date,
+  status: WorkingStatus,
+  beaconsRssi: {
+    RSSIBeaconId1?: number,
+    RSSIBeaconId2?: number,
+    RSSIBeaconId3?: number,
+  }
+  regionName: string,
+  measureTime: Date
 }

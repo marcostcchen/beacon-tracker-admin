@@ -2,7 +2,7 @@ export interface Notificacao {
   Id: string
   userId_OneSignal: string
   nome: string
-  horaEnvio: string
+  horaEnvio: Date
   titulo: string
   descricao: string
 }

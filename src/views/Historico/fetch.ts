@@ -8,7 +8,7 @@ export const listWorkingSessions: () => Promise<ListWorkingSessionRes | null> = 
     const token = ls.get(tokenKey);
 
     fetch(`${apiUrl}${url}`, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': token == null ? '' : token,

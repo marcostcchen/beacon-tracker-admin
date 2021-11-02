@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Collapsible from 'react-collapsible'
 import "./HistoricoScreen.css"
 import * as fetchUtils from './fetch';
-import { formatDate, formatDateHour, formatHour, Status } from '../../utils';
+import { convertWorkingSessionToString, formatDateHour, Status } from '../../utils';
 import { toast } from 'react-toastify';
 import { UserWorkSession } from '../../models';
 
@@ -13,15 +13,11 @@ interface Props {
 }
 
 const columns: GridColDef[] = [
-  { field: 'regionName', headerName: 'Região', width: 160 },
-  { field: 'date', headerName: 'Data', width: 120 },
-  { field: 'startWorkingTime', headerName: 'Início', width: 120, },
-  { field: 'startRestingTime', headerName: 'I.Descanso', width: 160, },
-  { field: 'finishRestingTime', headerName: 'F.Descanso', width: 160, },
-  { field: 'workedTime', headerName: 'T.Trabalhado(s)', width: 180, },
-  { field: 'restedTime', headerName: 'T.Descansado(s)', width: 190, },
-  { field: 'maxStayMinutes', headerName: 'T.Máx.Permitido(s)', width: 200 },
-  { field: 'minRestMinutes', headerName: 'T.Mín.Descanso(s)', width: 200, },
+  { field: 'regionName', headerName: 'Região', width: 200 },
+  { field: 'status', headerName: 'Operação', width: 160 },
+  { field: 'time', headerName: 'Tempo da Operação', width: 300 },
+  { field: 'startTime', headerName: 'Início', width: 200, },
+  { field: 'measureTime', headerName: 'Horário Medição', width: 200, },
 ];
 
 export const HistoricoScreen: React.FC<Props> = () => {
@@ -73,14 +69,10 @@ export const HistoricoScreen: React.FC<Props> = () => {
             let row = {
               id: index + 1 + Math.random(),
               regionName: workSession.regionName,
-              maxStayMinutes: workSession.maxStayMinutes,
-              minRestMinutes: workSession.minRestMinutes,
-              workedTime: ((new Date(workSession.startRestingTime).getTime() - new Date(workSession.startWorkingTime).getTime()) / 1000).toFixed(0),
-              restedTime: ((new Date(workSession.finishRestingTime).getTime() - new Date(workSession.startRestingTime).getTime()) / 1000).toFixed(0),
-              date: formatDate(workSession.startWorkingTime),
-              startWorkingTime: formatHour(workSession.startWorkingTime),
-              startRestingTime: formatHour(workSession.startRestingTime),
-              finishRestingTime: formatHour(workSession.finishRestingTime)
+              time: ((new Date(workSession.measureTime).getTime() - new Date(workSession.startTime).getTime())/(1000*60)).toFixed(2) + ' min',
+              status: convertWorkingSessionToString(workSession.status),
+              measureTime: formatDateHour(workSession.measureTime),
+              startTime: formatDateHour(workSession.startTime)
             }
             rows.push(row);
           })
@@ -92,8 +84,8 @@ export const HistoricoScreen: React.FC<Props> = () => {
                 <div style={{ width: "20%", textAlign: 'right' }}>v</div>
               </div>
             }>
-              <div style={{ height: 400, width: '100%' }}>
-                <DataGrid rows={rows} columns={columns} pageSize={5} />
+              <div style={{ height: 600, width: '100%' }}>
+                <DataGrid rows={rows} columns={columns} pageSize={100} />
               </div>
             </Collapsible>
           )

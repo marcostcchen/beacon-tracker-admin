@@ -8,3 +8,9 @@ export enum Roles {
   Admin,
   Funcionario
 }
+
+export enum WorkingStatus{ 
+  Working,
+  Resting,
+  Finished
+}

@@ -1,5 +1,7 @@
+import { WorkingStatus } from ".";
+import { WorkSession } from "../models";
 
-export const formatDateHour = (dateString: string) => {
+export const formatDateHour = (dateString: Date) => {
   let date = new Date(dateString);
 
   var day = date.getDate();       // yields date
@@ -15,7 +17,7 @@ export const formatDateHour = (dateString: string) => {
   let secondString = seconds.toString();
   if (seconds < 10) secondString = "0" + secondString
 
-  if(day.toString() === 'NaN') return ' - '
+  if (day.toString() === 'NaN') return ' - '
 
   return day + "/" + month + "/" + year + " " + hour + ':' + minuteString + ":" + secondString;
 }
@@ -28,7 +30,7 @@ export const formatDate = (dateString: string) => {
   var year = date.getFullYear();  // yields year
 
 
-  if(day.toString() === 'NaN') return ' - '
+  if (day.toString() === 'NaN') return ' - '
 
   return day + "/" + month + "/" + year;
 }
@@ -45,7 +47,20 @@ export const formatHour = (dateString: string) => {
   let secondString = seconds.toString();
   if (seconds < 10) secondString = "0" + secondString
 
-  if(hour.toString() === 'NaN') return ' - '
+  if (hour.toString() === 'NaN') return ' - '
 
   return hour + ':' + minuteString + ":" + secondString;
+}
+
+export const convertWorkingSessionToString = (workingStatus: WorkingStatus) => {
+  switch (workingStatus) {
+    case WorkingStatus.Finished:
+      return "Finalizado";
+    case WorkingStatus.Resting:
+      return "Descansando";
+    case WorkingStatus.Working:
+      return "Trabalhando";
+    default:
+      return "Finalizado";
+  }
 }

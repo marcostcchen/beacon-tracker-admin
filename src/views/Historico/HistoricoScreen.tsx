@@ -4,9 +4,10 @@ import React, { useEffect, useState } from 'react'
 import Collapsible from 'react-collapsible'
 import "./HistoricoScreen.css"
 import * as fetchUtils from './fetch';
-import { convertWorkingSessionToString, formatDateHour, Status } from '../../utils';
+import { convertWorkingSessionToString, formatDate, formatDateHour, Status } from '../../utils';
 import { toast } from 'react-toastify';
 import { UserWorkSession } from '../../models';
+import { CSVLink } from "react-csv";
 
 interface Props {
 
@@ -19,6 +20,14 @@ const columns: GridColDef[] = [
   { field: 'startTime', headerName: 'Início', width: 200, },
   { field: 'measureTime', headerName: 'Horário Medição', width: 200, },
 ];
+
+const rowsHeader = [
+  'regionName',
+  'status',
+  'time',
+  'startTime',
+  'measureTime',
+]
 
 export const HistoricoScreen: React.FC<Props> = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -69,7 +78,7 @@ export const HistoricoScreen: React.FC<Props> = () => {
             let row = {
               id: index + 1 + Math.random(),
               regionName: workSession.regionName,
-              time: ((new Date(workSession.measureTime).getTime() - new Date(workSession.startTime).getTime())/(1000*60)).toFixed(2) + ' min',
+              time: ((new Date(workSession.measureTime).getTime() - new Date(workSession.startTime).getTime()) / (1000 * 60)).toFixed(2) + ' min',
               status: convertWorkingSessionToString(workSession.status),
               measureTime: formatDateHour(workSession.measureTime),
               startTime: formatDateHour(workSession.startTime)
@@ -84,6 +93,15 @@ export const HistoricoScreen: React.FC<Props> = () => {
                 <div style={{ width: "20%", textAlign: 'right' }}>v</div>
               </div>
             }>
+              <CSVLink
+                separator={";"}
+                data={rows}
+                headers={rowsHeader}
+                filename={`${userWorkSession.name}_${formatDate((new Date).toString()).replaceAll("/", "").replaceAll(":", "")}.csv`}
+                style={{ marginLeft: 5 }}
+              >
+                Baixar
+              </CSVLink>
               <div style={{ height: 600, width: '100%' }}>
                 <DataGrid rows={rows} columns={columns} pageSize={100} />
               </div>

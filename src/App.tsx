@@ -1,48 +1,18 @@
 import { CircularProgress, makeStyles } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AppBarHeader, AppDrawer } from './components';
-import { DashboardScreen, HistoricoScreen, HomeScreen, LoginScreen, MapaScreen } from './views';
-import { toast, ToastContainer } from 'react-toastify';
+import { AboutScreen, DashboardScreen, HistoricoScreen, HomeScreen, LoginScreen, MapaScreen } from './views';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { efetuarLogin, Status, tokenKey, userKey } from './utils';
-import { User } from './models';
+
 var ls = require('local-storage');
 
 export const App = () => {
   const classes = useStyles();
-  const [isLoading, setIsLoading] = useState(true);
   const [isLogged, setIsLogged] = useState(false);
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
-
-  useEffect(() => {
-    const validateLogin = async () => {
-      const userString: string | null = ls.get(userKey)
-      if (userString != null) {
-        const user = JSON.parse(userString)
-        const efetuarLoginResponse = await efetuarLogin(user.login, user.password);
-        if (efetuarLoginResponse == null) {
-          setIsLogged(false);
-          setIsLoading(false);
-          return;
-        }
-
-        if (efetuarLoginResponse.status === Status.Error) {
-          setIsLogged(false);
-          setIsLoading(false);
-          toast.error(efetuarLoginResponse.message, { position: "bottom-right" });
-          return;
-        }
-
-        ls.set(tokenKey, "Bearer " + efetuarLoginResponse.token);
-        setIsLogged(true);
-        setIsLoading(false);
-      }
-      setIsLoading(false);
-    }
-    validateLogin();
-  }, [])
 
   const closeDrawer = () => {
     setIsOpenDrawer(false)
@@ -56,44 +26,38 @@ export const App = () => {
     setIsLogged(false);
   }
 
-  if (isLoading) {
-    return (
-      <div className={classes.root} style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
-        <CircularProgress size={50} />
-      </div>
-    )
-  }
-
   if (!isLogged) {
     return (
-      <>
-        <LoginScreen setIsLogged={setIsLogged} />
+      <Router>
+        <Switch>
+          <Route exact path="/"><LoginScreen setIsLogged={setIsLogged} /></Route>
+          <Route exact path="/about"><AboutScreen /></Route>
+        </Switch>
         <ToastContainer />
-      </>
+      </Router>
     )
   }
 
   return (
-    <>
-      <Router>
-        <div>
-          <nav>
-            <div className={classes.root}>
-              <AppDrawer isOpenDrawer={isOpenDrawer} closeDrawer={closeDrawer} />
-              <AppBarHeader logout={logout} openDrawer={openDrawer} />
-              <ToastContainer />
-            </div>
-          </nav>
+    <Router>
+      <div>
+        <nav>
+          <div className={classes.root}>
+            <AppDrawer isOpenDrawer={isOpenDrawer} closeDrawer={closeDrawer} />
+            <AppBarHeader logout={logout} openDrawer={openDrawer} />
+            <ToastContainer />
+          </div>
+        </nav>
 
-          <Switch>
-            <Route exact path="/"><HomeScreen /></Route>
-            <Route exact path="/dashboard"><DashboardScreen /></Route>
-            <Route exact path="/mapa"><MapaScreen /></Route>
-            <Route exact path="/historico"><HistoricoScreen /></Route>
-          </Switch>
-        </div>
-      </Router>
-    </>
+        <Switch>
+          <Route exact path="/"><HomeScreen /></Route>
+          <Route exact path="/dashboard"><DashboardScreen /></Route>
+          <Route exact path="/mapa"><MapaScreen /></Route>
+          <Route exact path="/historico"><HistoricoScreen /></Route>
+          <Route exact path="/about"><AboutScreen /></Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
